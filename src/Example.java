@@ -151,7 +151,26 @@ public class Example {
 
 		
     }
+    
+    public static OWLOntology addPL(Set<OWLClass> classes, OWLOntology ont, OWLDataFactory df, OWLOntologyManager manager) {
+        for (OWLClass cls : classes) {
+        	if (!hasPL(cls, ont)) {
+        		String name = getLabel(cls, ont, df);
+       
+        		OWLLiteral lbl = df.getOWLLiteral(name, OWL2Datatype.RDFS_LITERAL);
+        		OWLAnnotation label =
+        		  df.getOWLAnnotation( 
+        		    df.getOWLAnnotationProperty(IRI.create("http://ns.ontoforce.com/2013/disqover#preferredLabel")), lbl);
+        		OWLAxiom axiom = df.getOWLAnnotationAssertionAxiom(cls.getIRI(), label);
+        		List<OWLOntologyChange> changes = new 
+        				ArrayList<OWLOntologyChange>();
+        		changes.add(new AddAxiom(ont, axiom));
+        		manager.applyChanges(changes);
 
+        	}
+        }
+        return ont;
+    }
     	
 
     /** The examples here show how to load ontologies
@@ -184,23 +203,7 @@ public class Example {
         
         System.out.println(classes.size());
         
-        
-        for (OWLClass cls : classes) {
-        	if (!hasPL(cls, ontM)) {
-        		String name = getLabel(cls, ontM, df);
-        		
-        		OWLLiteral lbl = df.getOWLLiteral(name, OWL2Datatype.RDFS_LITERAL);
-        		OWLAnnotation label =
-        		  df.getOWLAnnotation( 
-        		    df.getOWLAnnotationProperty(IRI.create("http://ns.ontoforce.com/2013/disqover#preferredLabel")), lbl);
-        		OWLAxiom axiom = df.getOWLAnnotationAssertionAxiom(cls.getIRI(), label);
-        		List<OWLOntologyChange> changes = new 
-        				ArrayList<OWLOntologyChange>();
-        		changes.add(new AddAxiom(ontM, axiom));
-        		manager.applyChanges(changes);
-
-        	}
-        }
+        ontM = addPL(classes, ontM, df, manager);
         
         
 
