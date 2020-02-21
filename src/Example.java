@@ -39,6 +39,7 @@
 
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -50,20 +51,26 @@ import java.util.stream.Stream;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.io.OWLXMLOntologyFormat;
+import org.semanticweb.owlapi.model.AddAxiom;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAnnotation;
+import org.semanticweb.owlapi.model.OWLAnnotationProperty;
 import org.semanticweb.owlapi.model.OWLAnnotationValue;
+import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLDocumentFormat;
 import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.OWLOntologyChange;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyFormat;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 import org.semanticweb.owlapi.search.EntitySearcher;
 import org.semanticweb.owlapi.util.OWLEntityRemover;
+import org.semanticweb.owlapi.vocab.OWL2Datatype;
+import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
 import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
 
 import org.semanticweb.owlapi.reasoner.OWLReasonerFactory;
@@ -89,6 +96,14 @@ public class Example {
     	    }
     	}
     	return null;
+    }
+    
+    public static boolean hasPL(OWLClass cls, OWLOntology ont) {
+    	for(OWLAnnotation a : (EntitySearcher.getAnnotations(cls, ont))) {
+    	    OWLAnnotationProperty prop = a.getProperty();
+	        return (prop.toString().contains("preferredLabel"));
+    	}
+    	return false;
     }
     
     public static boolean isParent(OWLClass cls, OWLReasoner reasoner) {
@@ -164,6 +179,29 @@ public class Example {
         Set<OWLClass> classes = localPizza.getClassesInSignature();
         
         OWLOntology ontM = removeDup(manager, df, localPizza, reasoner, classes);
+
+        classes = ontM.getClassesInSignature();
+        
+        System.out.println(classes.size());
+        
+        
+        for (OWLClass cls : classes) {
+        	if (!hasPL(cls, ontM)) {
+        		String name = getLabel(cls, ontM, df);
+        		
+        		OWLLiteral lbl = df.getOWLLiteral(name, OWL2Datatype.RDFS_LITERAL);
+        		OWLAnnotation label =
+        		  df.getOWLAnnotation( 
+        		    df.getOWLAnnotationProperty(IRI.create("http://ns.ontoforce.com/2013/disqover#preferredLabel")), lbl);
+        		OWLAxiom axiom = df.getOWLAnnotationAssertionAxiom(cls.getIRI(), label);
+        		List<OWLOntologyChange> changes = new 
+        				ArrayList<OWLOntologyChange>();
+        		changes.add(new AddAxiom(ontM, axiom));
+        		manager.applyChanges(changes);
+
+        	}
+        }
+        
         
 
 		File outFile = new File("msp_m.owl");

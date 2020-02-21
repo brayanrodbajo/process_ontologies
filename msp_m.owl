@@ -5902,9 +5902,19 @@
     </Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
+        <IRI>_0</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Community Medicine</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:label"/>
         <IRI>_0</IRI>
         <Literal xml:lang="en" datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Community Medicine</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
+        <IRI>_00000</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Endodontics</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:label"/>
@@ -5955,6 +5965,11 @@
         <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
         <IRI>_00005</IRI>
         <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Public Health Dentistry</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
+        <IRI>_00005</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Public Health Dentistry</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:label"/>
@@ -6022,9 +6037,19 @@
         <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Clinical Genetics</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
+        <IRI>_00011</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Clinical Genetics</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:label"/>
         <IRI>_00011</IRI>
         <Literal xml:lang="en" datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Clinical Genetics</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
+        <IRI>_00012</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Diabetic Medicine</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:label"/>
@@ -6032,9 +6057,19 @@
         <Literal xml:lang="en" datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Diabetic Medicine</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
+        <IRI>_00013</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Pediatric Endocrinology</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:label"/>
         <IRI>_00013</IRI>
         <Literal xml:lang="en" datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Pediatric Endocrinology</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
+        <IRI>_00014</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Pediatric Gastroenterology</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:label"/>
@@ -6057,6 +6092,11 @@
         <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Pediatric Infectious Diseases</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
+        <IRI>_00016</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Pediatric Infectious Diseases</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:label"/>
         <IRI>_00016</IRI>
         <Literal xml:lang="en" datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Pediatric Infectious Diseases</Literal>
@@ -6075,6 +6115,11 @@
         <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
         <IRI>_00018</IRI>
         <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Pediatric Neurology</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
+        <IRI>_00018</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Pediatric Neurology</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:label"/>
@@ -6115,6 +6160,11 @@
         <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
         <IRI>_00024</IRI>
         <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Regenerative Medicine</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
+        <IRI>_00024</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Regenerative Medicine</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:label"/>
@@ -6167,6 +6217,11 @@
         <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Transplantation Surgery</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
+        <IRI>_00029</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Transplantation Surgery</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:label"/>
         <IRI>_00029</IRI>
         <Literal xml:lang="en" datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Transplantation Surgery</Literal>
@@ -6177,6 +6232,11 @@
         <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Burns Care</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
+        <IRI>_00030</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Burns Care</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:label"/>
         <IRI>_00030</IRI>
         <Literal xml:lang="en" datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Burns Care</Literal>
@@ -6185,6 +6245,11 @@
         <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
         <IRI>_00031</IRI>
         <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Pain Management</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
+        <IRI>_00031</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Pain Management</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:label"/>
@@ -6227,6 +6292,11 @@
         <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Anesthesiology</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
+        <IRI>_00035</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Anesthesiology</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="disqover:synonym"/>
         <IRI>_00035</IRI>
         <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">anaesthesia</Literal>
@@ -6245,6 +6315,11 @@
         <AnnotationProperty abbreviatedIRI="rdfs:label"/>
         <IRI>_00035</IRI>
         <Literal xml:lang="en" datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Anesthesiology</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
+        <IRI>_00036</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Metabolic Medicine</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="disqover:synonym"/>
@@ -6268,6 +6343,11 @@ https://www.healthcareers.nhs.uk/explore-roles/doctors/roles-doctors/medicine/me
         <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Genitourinary Medicine</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
+        <IRI>_00037</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Genitourinary Medicine</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="vitro:shortDef"/>
         <IRI>_00037</IRI>
         <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Doctors in genitourinary medicine (GUM) diagnose and treat sexually transmitted infections (STIs), including HIV. https://www.healthcareers.nhs.uk/explore-roles/doctors/roles-doctors/medicine/genitourinary-medicine</Literal>
@@ -6281,6 +6361,11 @@ https://www.healthcareers.nhs.uk/explore-roles/doctors/roles-doctors/medicine/me
         <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
         <IRI>_00038</IRI>
         <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Audiological Medicine</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
+        <IRI>_00038</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Audiological Medicine</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="disqover:synonym"/>
@@ -6303,6 +6388,11 @@ https://www.healthcareers.nhs.uk/explore-roles/doctors/roles-doctors/medicine/me
         <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Oral and Maxillofacial Surgery</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
+        <IRI>_00039</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Oral and Maxillofacial Surgery</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="vitro:shortDef"/>
         <IRI>_00039</IRI>
         <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Consultants in oral and maxillofacial Surgery (OMFS) deal with the diagnosis and treatment of patients with diseases affecting the mouth, jaws, face and neck. https://www.healthcareers.nhs.uk/explore-roles/doctors/roles-doctors/surgery/oral-and-maxillofacial-surgery</Literal>
@@ -6316,6 +6406,11 @@ https://www.healthcareers.nhs.uk/explore-roles/doctors/roles-doctors/medicine/me
         <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
         <IRI>_00040</IRI>
         <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Vascular Surgery</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
+        <IRI>_00040</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Vascular Surgery</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="vitro:shortDef"/>
@@ -6556,6 +6651,11 @@ Health Informatics</Literal>
         <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Medical Specialty</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
+        <IRI>_12</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Medical Specialty</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="disqover:synonym"/>
         <IRI>_12</IRI>
         <Literal datatypeIRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral">Clinical Specialty</Literal>
@@ -6601,6 +6701,11 @@ https://uts.nlm.nih.gov/metathesaurus.html?cui=C0025118
         <AnnotationProperty abbreviatedIRI="metadata:prefixIRI"/>
         <IRI>_28</IRI>
         <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">http://purl.bioontology.org/ontology/MESH/D000529</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
+        <IRI>_28</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Alternative Medicine</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
@@ -6727,6 +6832,11 @@ Bariatric Medicine</Literal>
         <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">http://purl.bioontology.org/ontology/MESH/D002309</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
+        <IRI>_34</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Cardiology</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="disqover:synonym"/>
         <IRI>_34</IRI>
         <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Cardiovascular Disease
@@ -6762,6 +6872,11 @@ Disease Specialty, Cardiovascular</Literal>
         <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Internal Medicine</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
+        <IRI>_35</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Internal medicine</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="vitro:shortDef"/>
         <IRI>_35</IRI>
         <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">A medical specialty concerned with the diagnosis and treatment of diseases of the internal organ systems of adults.</Literal>
@@ -6780,6 +6895,11 @@ Disease Specialty, Cardiovascular</Literal>
         <AnnotationProperty abbreviatedIRI="rdfs:label"/>
         <IRI>_36</IRI>
         <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Cardiothoracic Surgery</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
+        <IRI>_37</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Clinical Biochemistry</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:label"/>
@@ -6832,9 +6952,19 @@ Diagnoses, Laboratory</Literal>
         <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Clinical laboratory sciences/Clinical pathology/Laboratory medicine</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
+        <IRI>_39</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Clinical Immunology</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:label"/>
         <IRI>_39</IRI>
         <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Clinical Immunology</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
+        <IRI>_40</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Clinical Microbiology</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:label"/>
@@ -6867,14 +6997,29 @@ Diagnoses, Laboratory</Literal>
         <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Clinical Physiology</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
-        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
         <IRI>_42</IRI>
         <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Cytogenetics</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <IRI>_42</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Cytogenetics</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
         <IRI>_43</IRI>
         <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Cytohematology</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <IRI>_43</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Cytohematology</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
+        <IRI>_44</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Cytology</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:label"/>
@@ -6925,6 +7070,11 @@ Diagnoses, Laboratory</Literal>
         <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
         <IRI>_47</IRI>
         <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Emergency Medicine</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
+        <IRI>_47</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Emergency medicine</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
@@ -7071,6 +7221,11 @@ Medicine, Evidence Based</Literal>
         <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">http://purl.bioontology.org/ontology/MESH/D006403</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
+        <IRI>_55</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Hematologic Tests</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="disqover:synonym"/>
         <IRI>_55</IRI>
         <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Hematological Tests
@@ -7114,6 +7269,11 @@ Tests, Blood</Literal>
         <AnnotationProperty abbreviatedIRI="rdfs:label"/>
         <IRI>_57</IRI>
         <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Hepatology</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
+        <IRI>_58</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Histology</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:label"/>
@@ -7211,6 +7371,11 @@ Evidence Based Toxicology</Literal>
         <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Medical Toxicology</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
+        <IRI>_62</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Molecular Genetics</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:label"/>
         <IRI>_62</IRI>
         <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Molecular Genetics</Literal>
@@ -7288,6 +7453,11 @@ Screenings, Newborn Infant</Literal>
         <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
         <IRI>_66</IRI>
         <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Neuro Ophthalmology</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
+        <IRI>_66</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Neuro-ophthalmology</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:label"/>
@@ -7462,6 +7632,11 @@ Therapists, Occupational</Literal>
         <AnnotationProperty abbreviatedIRI="rdfs:label"/>
         <IRI>_78</IRI>
         <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Otolaryngology</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="disqover:preferredLabel"/>
+        <IRI>_79</IRI>
+        <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Parasitology</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:label"/>
