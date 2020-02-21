@@ -75,5 +75,16 @@
 	<classpathentry kind="lib" path="/home/brayan/eclipse-workspace/owlapi-osgidistribution-4.1.0/lib/commons-io-2.4.jar"/>
 	<classpathentry kind="lib" path="/home/brayan/eclipse-workspace/owlapi-osgidistribution-4.1.0/lib/commons-codec-1.6.jar"/>
 	<classpathentry kind="lib" path="/home/brayan/eclipse-workspace/owlapi-osgidistribution-4.1.0/lib/aopalliance-1.0.jar"/>
+	<classpathentry kind="lib" path="/home/brayan/eclipse-workspace/jar_files/unirest-java-1.5.0.jar"/>
+	<classpathentry kind="lib" path="/home/brayan/eclipse-workspace/jar_files/slf4j-api-1.7.25.jar"/>
+	<classpathentry kind="lib" path="/home/brayan/eclipse-workspace/jar_files/json-20160212.jar"/>
+	<classpathentry kind="lib" path="/home/brayan/eclipse-workspace/jar_files/httpmime-4.3.6.jar"/>
+	<classpathentry kind="lib" path="/home/brayan/eclipse-workspace/jar_files/httpcore-nio-4.3.2.jar"/>
+	<classpathentry kind="lib" path="/home/brayan/eclipse-workspace/jar_files/httpcore-4.3.3.jar"/>
+	<classpathentry kind="lib" path="/home/brayan/eclipse-workspace/jar_files/httpclient-4.3.6.jar"/>
+	<classpathentry kind="lib" path="/home/brayan/eclipse-workspace/jar_files/httpasyncclient-4.0.2.jar"/>
+	<classpathentry kind="lib" path="/home/brayan/eclipse-workspace/jar_files/gson-2.8.0.jar"/>
+	<classpathentry kind="lib" path="/home/brayan/eclipse-workspace/jar_files/commons-logging-1.1.3.jar"/>
+	<classpathentry kind="lib" path="/home/brayan/eclipse-workspace/jar_files/commons-codec-1.6.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

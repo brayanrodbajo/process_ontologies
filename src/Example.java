@@ -38,17 +38,27 @@
  */
 
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.io.OWLXMLOntologyFormat;
 import org.semanticweb.owlapi.model.AddAxiom;
@@ -69,8 +79,16 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 import org.semanticweb.owlapi.search.EntitySearcher;
 import org.semanticweb.owlapi.util.OWLEntityRemover;
+import org.semanticweb.owlapi.util.OWLEntityRenamer;
 import org.semanticweb.owlapi.vocab.OWL2Datatype;
 import org.semanticweb.owlapi.vocab.OWLRDFVocabulary;
+
+
+import io.joshworks.restclient.http.HttpResponse;
+import io.joshworks.restclient.http.JsonNode;
+import io.joshworks.restclient.http.Unirest;
+import io.joshworks.restclient.request.GetRequest;
+
 import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
 
 import org.semanticweb.owlapi.reasoner.OWLReasonerFactory;
@@ -171,13 +189,50 @@ public class Example {
         }
         return ont;
     }
-    	
+
+    public static OWLOntology addSAAux (OWLClass cls, String saUrl, OWLOntology ont, OWLDataFactory df, OWLOntologyManager manager) {
+    	IRI lbl = IRI.create(saUrl);
+		OWLAnnotation label =
+		  df.getOWLAnnotation( 
+      		    df.getOWLAnnotationProperty(df.getRDFSSeeAlso().getIRI()), lbl);
+		OWLAxiom axiom = df.getOWLAnnotationAssertionAxiom(cls.getIRI(), label);
+		List<OWLOntologyChange> changes = new 
+				ArrayList<OWLOntologyChange>();
+		changes.add(new AddAxiom(ont, axiom));
+		manager.applyChanges(changes);
+		
+		return ont;
+    }
+    
+    public static OWLOntology addSA(Set<OWLClass> classes, OWLOntology ont, OWLDataFactory df, OWLOntologyManager manager) throws Exception {
+        for (OWLClass cls : classes) {
+    		String name = getLabel(cls, ont, df);
+    		
+    		String url =  "http://data.bioontology.org/search?q="+URLEncoder.encode(name, "UTF-8")+"&require_exact_match=true";
+    		
+    		HttpResponse<JsonNode> jsonResponse = Unirest.get(url)
+    				  .header("Authorization", "apikey token="/*+TODO: apiTOKEN*/)
+    				  .asJson();
+
+    		
+    		JSONObject jsonObj = jsonResponse.getBody().getObject();
+    		for (Object col : jsonObj.getJSONArray("collection")) {
+    			JSONObject colObj = ((JSONObject) col);
+    			String seeAlso =  colObj.getString("@id");
+    			ont = addSAAux(cls, seeAlso, ont, df, manager);
+    		}
+    		
+   
+        }
+        return ont;
+    }
+    
 
     /** The examples here show how to load ontologies
      * 
      * @throws OWLOntologyCreationException 
      * @throws OWLOntologyStorageException */
-    public static void main(String[] args) throws OWLOntologyCreationException, OWLOntologyStorageException {
+    public static void main(String[] args) throws Exception{
     	
     	Example objExample = new Example();
     	
@@ -204,6 +259,9 @@ public class Example {
         System.out.println(classes.size());
         
         ontM = addPL(classes, ontM, df, manager);
+        
+
+        ontM = addSA(classes, ontM, df, manager);
         
         
 
