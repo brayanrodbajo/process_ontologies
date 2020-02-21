@@ -119,7 +119,9 @@ public class Example {
     public static boolean hasPL(OWLClass cls, OWLOntology ont) {
     	for(OWLAnnotation a : (EntitySearcher.getAnnotations(cls, ont))) {
     	    OWLAnnotationProperty prop = a.getProperty();
-	        return (prop.toString().contains("preferredLabel"));
+    	    if (prop.toString().contains("preferredLabel")) {
+	        	return true;
+	        }
     	}
     	return false;
     }
@@ -236,9 +238,10 @@ public class Example {
     	
     	Example objExample = new Example();
     	
+    	String inFile = "pa";
         // Get hold of an ontology manager
         OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-        File file = new File("/media/brayan/Acer/Users/Brayan/Desktop/alex/Ontologies/msp.owl");
+        File file = new File("/media/brayan/Acer/Users/Brayan/Desktop/alex/Ontologies/"+inFile+".owl");
         // Now load the local copy
         OWLOntology localPizza = manager.loadOntologyFromOntologyDocument(file);
         System.out.println("Loaded ontology: " + localPizza);
@@ -265,7 +268,7 @@ public class Example {
         
         
 
-		File outFile = new File("msp_m.owl");
+		File outFile = new File(inFile+"_m.owl");
 
 		OWLDocumentFormat format = manager.getOntologyFormat(ontM);
 		OWLXMLOntologyFormat owlxmlFormat = new OWLXMLOntologyFormat();
