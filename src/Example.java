@@ -54,6 +54,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -148,7 +151,7 @@ public class Example {
         return ont;
     }
     
-    public static OWLOntology removeDup(OWLOntologyManager manager, OWLDataFactory df, OWLOntology ont, OWLReasoner reasoner, Set<OWLClass> classes) throws OWLOntologyStorageException {
+    public static OWLOntology removeDup(OWLOntologyManager manager, OWLDataFactory df, OWLOntology ont, OWLReasoner reasoner, Set<OWLClass> classes, Logger logger) throws OWLOntologyStorageException {
     	List<String> labels = classes.stream()
     									.map(clazz->getLabel(clazz, ont, df))
     									.collect(Collectors.toList()); 
@@ -163,6 +166,7 @@ public class Example {
 				if (!isParent(cls, reasoner)) {
 					ontM = removeClass(ontM, manager, cls);
 					System.out.println(cls);
+					logger.info(a+": removed duplicated");
 				}
 			}
 			index+=1;
@@ -172,7 +176,7 @@ public class Example {
 		
     }
     
-    public static OWLOntology addPL(Set<OWLClass> classes, OWLOntology ont, OWLDataFactory df, OWLOntologyManager manager) {
+    public static OWLOntology addPL(Set<OWLClass> classes, OWLOntology ont, OWLDataFactory df, OWLOntologyManager manager, Logger logger) {
         for (OWLClass cls : classes) {
         	if (!hasPL(cls, ont)) {
         		String name = getLabel(cls, ont, df);
@@ -186,6 +190,8 @@ public class Example {
         				ArrayList<OWLOntologyChange>();
         		changes.add(new AddAxiom(ont, axiom));
         		manager.applyChanges(changes);
+        		
+        		logger.info(name+": added PreferredLabel");
 
         	}
         }
@@ -206,15 +212,15 @@ public class Example {
 		return ont;
     }
     
-    public static OWLOntology addSA(Set<OWLClass> classes, OWLOntology ont, OWLDataFactory df, OWLOntologyManager manager) throws Exception {
+    public static OWLOntology addSA(Set<OWLClass> classes, OWLOntology ont, OWLDataFactory df, OWLOntologyManager manager, Logger logger) throws Exception {
         for (OWLClass cls : classes) {
     		String name = getLabel(cls, ont, df);
     		
     		String url =  "http://data.bioontology.org/search?q="+URLEncoder.encode(name, "UTF-8")+"&require_exact_match=true";
     		
     		HttpResponse<JsonNode> jsonResponse = Unirest.get(url)
-    				  .header("Authorization", "apikey token="/*+TODO: apiTOKEN*/)
-    				  .asJson();
+    				.header("Authorization", "apikey token="/*+TODO: apiTOKEN*/)
+    				.asJson();
 
     		
     		JSONObject jsonObj = jsonResponse.getBody().getObject();
@@ -222,6 +228,7 @@ public class Example {
     			JSONObject colObj = ((JSONObject) col);
     			String seeAlso =  colObj.getString("@id");
     			ont = addSAAux(cls, seeAlso, ont, df, manager);
+    			logger.info(name+": added seeAlso: "+seeAlso);
     		}
     		
    
@@ -235,13 +242,21 @@ public class Example {
      * @throws OWLOntologyCreationException 
      * @throws OWLOntologyStorageException */
     public static void main(String[] args) throws Exception{
+    	Logger logger = Logger.getLogger("MyLog");  
+        FileHandler fh = new FileHandler("LogFile.log");
+        logger.addHandler(fh);
+        SimpleFormatter formatter = new SimpleFormatter();  
+        fh.setFormatter(formatter);
+        logger.setUseParentHandlers(false);
+        
+        
     	
     	Example objExample = new Example();
     	
-    	String inFile = "pa";
+    	String inFile = "out";
         // Get hold of an ontology manager
         OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-        File file = new File("/media/brayan/Acer/Users/Brayan/Desktop/alex/Ontologies/"+inFile+".owl");
+        File file = new File("/media/brayan/Acer/Users/Brayan/Desktop/alex/Ontologies/Ontologies-git/"+inFile+".owl");
         // Now load the local copy
         OWLOntology localPizza = manager.loadOntologyFromOntologyDocument(file);
         System.out.println("Loaded ontology: " + localPizza);
@@ -255,16 +270,16 @@ public class Example {
         
         Set<OWLClass> classes = localPizza.getClassesInSignature();
         
-        OWLOntology ontM = removeDup(manager, df, localPizza, reasoner, classes);
+        OWLOntology ontM = removeDup(manager, df, localPizza, reasoner, classes, logger);
 
         classes = ontM.getClassesInSignature();
         
         System.out.println(classes.size());
         
-        ontM = addPL(classes, ontM, df, manager);
+        ontM = addPL(classes, ontM, df, manager, logger);
         
 
-        ontM = addSA(classes, ontM, df, manager);
+        ontM = addSA(classes, ontM, df, manager, logger);
         
         
 

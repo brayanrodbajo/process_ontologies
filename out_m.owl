@@ -6970,11 +6970,6 @@
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:seeAlso"/>
         <IRI>_120</IRI>
-        <IRI>http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C48209</IRI>
-    </AnnotationAssertion>
-    <AnnotationAssertion>
-        <AnnotationProperty abbreviatedIRI="rdfs:seeAlso"/>
-        <IRI>_120</IRI>
         <IRI>http://schema.org/LaboratoryScience</IRI>
     </AnnotationAssertion>
     <AnnotationAssertion>
@@ -7265,11 +7260,6 @@
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:seeAlso"/>
         <IRI>_130</IRI>
-        <IRI>http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C21270</IRI>
-    </AnnotationAssertion>
-    <AnnotationAssertion>
-        <AnnotationProperty abbreviatedIRI="rdfs:seeAlso"/>
-        <IRI>_130</IRI>
         <IRI>http://omv.ontoware.org/2005/05/ontology#Ontology</IRI>
     </AnnotationAssertion>
     <AnnotationAssertion>
@@ -7430,11 +7420,6 @@
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:seeAlso"/>
         <IRI>_136</IRI>
-        <IRI>http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C42639</IRI>
-    </AnnotationAssertion>
-    <AnnotationAssertion>
-        <AnnotationProperty abbreviatedIRI="rdfs:seeAlso"/>
-        <IRI>_136</IRI>
         <IRI>http://schema.org/HealthAspectEnumeration</IRI>
     </AnnotationAssertion>
     <AnnotationAssertion>
@@ -7536,11 +7521,6 @@
         <AnnotationProperty abbreviatedIRI="rdfs:seeAlso"/>
         <IRI>_14</IRI>
         <IRI>http://localhost/plosthes.2017-1#8408</IRI>
-    </AnnotationAssertion>
-    <AnnotationAssertion>
-        <AnnotationProperty abbreviatedIRI="rdfs:seeAlso"/>
-        <IRI>_14</IRI>
-        <IRI>http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C16275</IRI>
     </AnnotationAssertion>
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:seeAlso"/>
@@ -7800,11 +7780,6 @@
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:seeAlso"/>
         <IRI>_149</IRI>
-        <IRI>http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C20678</IRI>
-    </AnnotationAssertion>
-    <AnnotationAssertion>
-        <AnnotationProperty abbreviatedIRI="rdfs:seeAlso"/>
-        <IRI>_149</IRI>
         <IRI>http://purl.bioontology.org/ontology/SNMI/A-01000</IRI>
     </AnnotationAssertion>
     <AnnotationAssertion>
@@ -8045,6 +8020,11 @@
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:seeAlso"/>
         <IRI>_154</IRI>
+        <IRI>http://www.semanticweb.org/avl/ontologies/2017/7/ITEMAS_v1.2#Software</IRI>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:seeAlso"/>
+        <IRI>_154</IRI>
         <IRI>https://schema.org/SoftwareApplication</IRI>
     </AnnotationAssertion>
     <AnnotationAssertion>
@@ -8126,11 +8106,6 @@
         <AnnotationProperty abbreviatedIRI="rdfs:seeAlso"/>
         <IRI>_158</IRI>
         <IRI>http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C142730</IRI>
-    </AnnotationAssertion>
-    <AnnotationAssertion>
-        <AnnotationProperty abbreviatedIRI="rdfs:seeAlso"/>
-        <IRI>_158</IRI>
-        <IRI>http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C48298</IRI>
     </AnnotationAssertion>
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:seeAlso"/>
@@ -8331,6 +8306,11 @@
         <AnnotationProperty abbreviatedIRI="rdfs:seeAlso"/>
         <IRI>_160</IRI>
         <AbbreviatedIRI>obo:OMIT_0000123</AbbreviatedIRI>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:seeAlso"/>
+        <IRI>_160</IRI>
+        <IRI>http://radlex.org/RID/RID8</IRI>
     </AnnotationAssertion>
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:seeAlso"/>
@@ -8891,11 +8871,6 @@
         <AnnotationProperty abbreviatedIRI="rdfs:label"/>
         <IRI>_21</IRI>
         <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Assistive technology</Literal>
-    </AnnotationAssertion>
-    <AnnotationAssertion>
-        <AnnotationProperty abbreviatedIRI="rdfs:seeAlso"/>
-        <IRI>_21</IRI>
-        <IRI>http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C93300</IRI>
     </AnnotationAssertion>
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:seeAlso"/>
@@ -9560,11 +9535,6 @@
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:seeAlso"/>
         <IRI>_54</IRI>
-        <IRI>http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C43418</IRI>
-    </AnnotationAssertion>
-    <AnnotationAssertion>
-        <AnnotationProperty abbreviatedIRI="rdfs:seeAlso"/>
-        <IRI>_54</IRI>
         <IRI>http://neurolog.unice.fr/ontoneurolog/v3.0/core-ontology-programs-software.owl#cluster</IRI>
     </AnnotationAssertion>
     <AnnotationAssertion>
@@ -9986,11 +9956,6 @@
         <AnnotationProperty abbreviatedIRI="rdfs:label"/>
         <IRI>_71</IRI>
         <Literal datatypeIRI="http://www.w3.org/2000/01/rdf-schema#Literal">Data storage</Literal>
-    </AnnotationAssertion>
-    <AnnotationAssertion>
-        <AnnotationProperty abbreviatedIRI="rdfs:seeAlso"/>
-        <IRI>_71</IRI>
-        <IRI>http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C142494</IRI>
     </AnnotationAssertion>
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:seeAlso"/>
@@ -10465,11 +10430,6 @@
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:seeAlso"/>
         <IRI>_96</IRI>
-        <IRI>http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C15754</IRI>
-    </AnnotationAssertion>
-    <AnnotationAssertion>
-        <AnnotationProperty abbreviatedIRI="rdfs:seeAlso"/>
-        <IRI>_96</IRI>
         <IRI>http://purl.bioontology.org/ontology/CSP/1265-5861</IRI>
     </AnnotationAssertion>
     <AnnotationAssertion>
@@ -10536,16 +10496,6 @@
         <AnnotationProperty abbreviatedIRI="rdfs:seeAlso"/>
         <IRI>_98</IRI>
         <IRI>http://mged.sourceforge.net/ontologies/MGEDOntology.owl#Hardware</IRI>
-    </AnnotationAssertion>
-    <AnnotationAssertion>
-        <AnnotationProperty abbreviatedIRI="rdfs:seeAlso"/>
-        <IRI>_98</IRI>
-        <IRI>http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C19238</IRI>
-    </AnnotationAssertion>
-    <AnnotationAssertion>
-        <AnnotationProperty abbreviatedIRI="rdfs:seeAlso"/>
-        <IRI>_98</IRI>
-        <IRI>http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C61402</IRI>
     </AnnotationAssertion>
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:seeAlso"/>
