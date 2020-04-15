@@ -64,7 +64,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.io.OWLXMLOntologyFormat;
+import org.semanticweb.owlapi.io.RDFXMLOntologyFormat;
 import org.semanticweb.owlapi.model.AddAxiom;
+import org.semanticweb.owlapi.model.HasApplyChanges;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAnnotation;
 import org.semanticweb.owlapi.model.OWLAnnotationProperty;
@@ -73,6 +75,7 @@ import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLDocumentFormat;
+import org.semanticweb.owlapi.model.OWLEntity;
 import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyChange;
@@ -222,15 +225,32 @@ public class PutLabels {
 		
 		return ont;
     }
+
+    public static OWLOntology addSyn (OWLClass cls, String syn, OWLOntology ont, OWLDataFactory df, OWLOntologyManager manager, Logger logger) {
+    	
+    	OWLLiteral synLit = df.getOWLLiteral(syn, OWL2Datatype.RDFS_LITERAL);
+    	OWLAnnotation ann =
+      		  df.getOWLAnnotation( 
+      		    df.getOWLAnnotationProperty(IRI.create("http://ns.ontoforce.com/2013/disqover#synonym")), synLit);
+		OWLAxiom axiom = df.getOWLAnnotationAssertionAxiom(cls.getIRI(), ann);
+		List<OWLOntologyChange> changes = new 
+				ArrayList<OWLOntologyChange>();
+		changes.add(new AddAxiom(ont, axiom));
+		manager.applyChanges(changes);
+		
+		String name = getLabel(cls, ont, df);		
+		logger.info(name+": added Synonym "+syn);
+		return ont;
+    }
     
     public static OWLOntology addSA(Set<OWLClass> classes, OWLOntology ont, OWLDataFactory df, OWLOntologyManager manager, Logger logger) throws Exception {
         for (OWLClass cls : classes) {
     		String name = getLabel(cls, ont, df);
     		
-    		String url =  "http://data.bioontology.org/search?q="+URLEncoder.encode(name, "UTF-8")+"&require_exact_match=true";
+    		String url =  "http://data.bioontology.org/search?q="+URLEncoder.encode(name, "UTF-8")+"&exact_match=true&ontologies=SNOMEDCT";
     		
     		HttpResponse<JsonNode> jsonResponse = Unirest.get(url)
-    				.header("Authorization", "apikey token="/*+TODO: apiTOKEN*/)
+    				.header("Authorization", "apikey token=082a4703-4c2e-43fa-a25e-87eca91a9a1b"/*+TODO: apiTOKEN*/)
     				.asJson();
 
     		
@@ -239,6 +259,15 @@ public class PutLabels {
     			JSONObject colObj = ((JSONObject) col);
     			String seeAlso =  colObj.getString("@id");
     			ont = addSAAux(cls, seeAlso, ont, df, manager);
+    			if (colObj.getString("prefLabel").equals(name)) {
+	    			for (Object synObj : colObj.getJSONArray("synonym")) {
+	    				String syn = (String) synObj; 
+	    				ont = addSyn(cls, syn, ont, df, manager, logger);
+	    			}
+    			}else {
+    				String nameInt = colObj.getString("prefLabel");
+    				ont =  addSyn (cls, nameInt, ont, df, manager, logger);
+    			}
     			logger.info(name+": added seeAlso: "+seeAlso);
     		}
     		
@@ -268,6 +297,33 @@ public class PutLabels {
         }
         return ont;
     }
+
+    public static OWLOntology setIRIs(Set<OWLClass> classes, OWLOntology ont, OWLDataFactory df, OWLOntologyManager manager, Logger logger) throws OWLOntologyStorageException {
+    	int counter = 183;
+    		
+       
+		OWLEntityRenamer renamer = new OWLEntityRenamer(manager, Collections.singleton(ont));
+	    Map<OWLEntity, IRI> entity2IRIMap = new HashMap<>();
+
+	    for (OWLClass cls :  ont.getClassesInSignature())
+	    {
+	    	String iri = cls.getIRI().toString();
+	    	
+            	if (!iri.startsWith("http://ontologies.eithealth.eu/eithealth/OUT_")) {
+    	        
+            		entity2IRIMap.put(cls, IRI.create("http://ontologies.eithealth.eu/eithealth/OUT_"+counter));
+
+            		logger.info(iri+": IRI changed");
+            		counter++;
+            		System.out.println(iri);
+        	}
+	    }
+
+	    ((HasApplyChanges) ont).applyChanges(renamer.changeIRI(entity2IRIMap));
+
+        
+        return ont;
+    }
     
 
     /** The examples here show how to load ontologies
@@ -286,10 +342,10 @@ public class PutLabels {
     	
     	PutLabels obj = new PutLabels();
     	
-    	String inFile = "out_m_protege";
+    	String inFile = "out_m_protege_m_m";
         // Get hold of an ontology manager
         OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-        File file = new File("/media/brayan/Acer/Users/Brayan/Desktop/alex/Ontologies/Ontologies-git/"+inFile+".owl");
+        File file = new File("/home/brayan/eclipse-workspace/Owlapi/"+inFile+".owl");
         // Now load the local copy
         OWLOntology objOnto = manager.loadOntologyFromOntologyDocument(file);
         System.out.println("Loaded ontology: " + objOnto);
@@ -302,18 +358,27 @@ public class PutLabels {
         System.out.println("    from: " + documentIRI);
         
         Set<OWLClass> classes = objOnto.getClassesInSignature();
+//        for (OWLClass cls : classes) {
+//        		String iri = cls.getIRI().getFragment();
+//        		System.out.print(iri);
+//        		break;
+//        }
         
-        OWLOntology ontM = addLabels(classes, objOnto, df, manager, logger);
+        //        NodeSet<OWLClass> children =  reasoner.getSubClasses(, true);
         
-        
-		File outFile = new File(inFile+"_m.owl");
+//        OWLOntology ontM = setIRIs(classes, objOnto, df, manager, logger);
+//        
+//        
+		File outFile = new File(inFile+"_seealso.owl");
+		
+		OWLOntology ontM = addSA(classes, objOnto, df, manager, logger);
 
 		OWLDocumentFormat format = manager.getOntologyFormat(ontM);
-		OWLXMLOntologyFormat owlxmlFormat = new OWLXMLOntologyFormat();
+		OWLXMLOntologyFormat rdfxmlFormat = new OWLXMLOntologyFormat();
 		if (format.isPrefixOWLOntologyFormat()) { 
-		  owlxmlFormat.copyPrefixesFrom(format.asPrefixOWLOntologyFormat()); 
+		  rdfxmlFormat.copyPrefixesFrom(format.asPrefixOWLOntologyFormat()); 
 		}
-		manager.saveOntology(ontM, owlxmlFormat, IRI.create(outFile.toURI()));
+		manager.saveOntology(ontM, rdfxmlFormat, IRI.create(outFile.toURI()));
         
         
         // Remove the ontology again so we can reload it later
