@@ -41,6 +41,7 @@
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.PrintStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -63,6 +64,10 @@ import java.util.stream.Stream;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.semanticweb.owlapi.apibinding.OWLManager;
+
+import uk.ac.manchester.cs.owl.owlapi.OWLClassImpl;
+import uk.ac.manchester.cs.owl.owlapi.OWLEquivalentClassesAxiomImpl;
+import uk.ac.manchester.cs.owlapi.modularity.ModuleType;
 import org.semanticweb.owlapi.io.OWLXMLOntologyFormat;
 import org.semanticweb.owlapi.io.RDFXMLOntologyFormat;
 import org.semanticweb.owlapi.model.AddAxiom;
@@ -76,6 +81,7 @@ import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLDocumentFormat;
 import org.semanticweb.owlapi.model.OWLEntity;
+import org.semanticweb.owlapi.model.OWLEquivalentClassesAxiom;
 import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyChange;
@@ -84,6 +90,8 @@ import org.semanticweb.owlapi.model.OWLOntologyFormat;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 import org.semanticweb.owlapi.search.EntitySearcher;
+import org.semanticweb.owlapi.util.CollectionFactory;
+import org.semanticweb.owlapi.util.CollectionFactory.ConditionalCopySet;
 import org.semanticweb.owlapi.util.OWLEntityRemover;
 import org.semanticweb.owlapi.util.OWLEntityRenamer;
 import org.semanticweb.owlapi.vocab.OWL2Datatype;
@@ -94,11 +102,15 @@ import io.joshworks.restclient.http.HttpResponse;
 import io.joshworks.restclient.http.JsonNode;
 import io.joshworks.restclient.http.Unirest;
 import io.joshworks.restclient.request.GetRequest;
+import uk.ac.manchester.cs.owlapi.modularity.SyntacticLocalityModuleExtractor;
 
 import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
 
 import org.semanticweb.owlapi.reasoner.OWLReasonerFactory;
+import org.semanticweb.owlapi.reasoner.SimpleConfiguration;
+import org.semanticweb.owlapi.reasoner.structural.StructuralReasoner;
 import org.semanticweb.owlapi.reasoner.structural.StructuralReasonerFactory;
+import org.semanticweb.owlapi.reasoner.BufferingMode;
 import org.semanticweb.owlapi.reasoner.Node;
 import org.semanticweb.owlapi.reasoner.NodeSet;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
@@ -247,7 +259,7 @@ public class PutLabels {
         for (OWLClass cls : classes) {
     		String name = getLabel(cls, ont, df);
     		
-    		String url =  "http://data.bioontology.org/search?q="+URLEncoder.encode(name, "UTF-8")+"&exact_match=true&ontologies=SNOMEDCT";
+    		String url =  "http://data.bioontology.org/search?q="+URLEncoder.encode(name, "UTF-8")+"&exact_match=true&ontologies=EDAM-BIOIMAGING%2CICDO%2CMEDRA%2CNCIT%2CSNOMEDCT";
     		
     		HttpResponse<JsonNode> jsonResponse = Unirest.get(url)
     				.header("Authorization", "apikey token=082a4703-4c2e-43fa-a25e-87eca91a9a1b"/*+TODO: apiTOKEN*/)
@@ -259,11 +271,13 @@ public class PutLabels {
     			JSONObject colObj = ((JSONObject) col);
     			String seeAlso =  colObj.getString("@id");
     			ont = addSAAux(cls, seeAlso, ont, df, manager);
-    			if (colObj.getString("prefLabel").equals(name)) {
-	    			for (Object synObj : colObj.getJSONArray("synonym")) {
-	    				String syn = (String) synObj; 
-	    				ont = addSyn(cls, syn, ont, df, manager, logger);
-	    			}
+    			if (colObj.getString("prefLabel").equalsIgnoreCase(name)) {
+    				if (colObj.has("synonym")) {
+		    			for (Object synObj : colObj.getJSONArray("synonym")) {
+		    				String syn = (String) synObj; 
+		    				ont = addSyn(cls, syn, ont, df, manager, logger);
+		    			}
+    				}
     			}else {
     				String nameInt = colObj.getString("prefLabel");
     				ont =  addSyn (cls, nameInt, ont, df, manager, logger);
@@ -342,10 +356,10 @@ public class PutLabels {
     	
     	PutLabels obj = new PutLabels();
     	
-    	String inFile = "out_m_protege_m_m";
+    	String inFile = "ontology-2020-04-11_18-11-19_seealso";
         // Get hold of an ontology manager
         OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-        File file = new File("/home/brayan/eclipse-workspace/Owlapi/"+inFile+".owl");
+        File file = new File(""+inFile+".owl");
         // Now load the local copy
         OWLOntology objOnto = manager.loadOntologyFromOntologyDocument(file);
         System.out.println("Loaded ontology: " + objOnto);
@@ -353,32 +367,104 @@ public class PutLabels {
         IRI documentIRI = manager.getOntologyDocumentIRI(objOnto);
         OWLDataFactory df = OWLManager.getOWLDataFactory();
         StructuralReasonerFactory rf = new StructuralReasonerFactory();
-        OWLReasoner reasoner = rf.createReasoner(objOnto);
 
         System.out.println("    from: " + documentIRI);
+
+		/*
+		 * File fileCons = new File("output.txt"); //Instantiating the PrintStream class
+		 * PrintStream stream = new PrintStream(fileCons); System.setOut(stream);
+		 */        
         
-        Set<OWLClass> classes = objOnto.getClassesInSignature();
+        /**removing equivalentClasses**/
+        
+        Set<OWLAxiom> axiomsToRemove = new HashSet<OWLAxiom>();
+        for (OWLAxiom ax : objOnto.getAxioms()) {
+        	if(OWLEquivalentClassesAxiomImpl.class.isAssignableFrom(ax.getClass())) {
+    			OWLClass ppalClass = ((OWLEquivalentClassesAxiomImpl) ax).getNamedClasses().iterator().next();
+        		for(OWLClass a : ax.getClassesInSignature()) {
+        				if (!a.getIRI().toString().equals(ppalClass.getIRI().toString())) {
+	        				objOnto = addSAAux(ppalClass, a.getIRI().toString(), objOnto, df, manager);
+        				}  
+        		}
+        		axiomsToRemove.add(ax);
+        	}
+        }
+
+    	manager.removeAxioms(objOnto, axiomsToRemove);
+    	
+        
+       
+        OWLClass procedure = df.getOWLClass(IRI.create("http://snomed.info/id/71388002"));
+        Set<OWLEntity> sig = new HashSet<OWLEntity>();
+        sig.add(procedure);
+        Set<OWLEntity> seedSig = new HashSet<OWLEntity>();
+        OWLReasoner reasoner = new StructuralReasoner(objOnto, new SimpleConfiguration(),
+                BufferingMode.NON_BUFFERING);
+        for (OWLEntity ent : sig) {
+            seedSig.add(ent);
+            if (OWLClass.class.isAssignableFrom(ent.getClass())) { // checks if ent is an OWLClass
+                NodeSet<OWLClass> subClasses = reasoner.getSubClasses((OWLClass) ent,
+                        false);
+                seedSig.addAll(subClasses.getFlattened());
+            }
+        }
+        
+        // Output for debugging purposes
+        System.out.println();
+        System.out.println("Some statistics of the original ontology:");
+        System.out.println("  " + objOnto.getSignature().size() + " entities");
+        System.out.println("  " + objOnto.getLogicalAxiomCount() + " logical axioms");
+        System.out.println("  " + (objOnto.getAxiomCount() - objOnto.getLogicalAxiomCount())
+                + " other axioms");
+        System.out.println();
+        
+        
+        SyntacticLocalityModuleExtractor sme = new SyntacticLocalityModuleExtractor(manager,
+                objOnto, ModuleType.STAR);
+        IRI moduleIRI = IRI.create("file:/home/brayan/eclipse-workspace/Owlapi/proceduresSCT.owl");
+        OWLOntology ontM = sme.extractAsOntology(seedSig, moduleIRI);
+
+        
+        // Output for debugging purposes
+        System.out.println("Some statistics of the module:");
+        System.out.println("  " + ontM.getSignature().size() + " entities");
+        System.out.println("  " + ontM.getLogicalAxiomCount() + " logical axioms");
+        System.out.println("  " + (ontM.getAxiomCount() - ontM.getLogicalAxiomCount())
+                + " other axioms");
+        System.out.println();
+        
+//        Set<OWLClass> classes = objOnto.getClassesInSignature();
+        
+//		System.out.println(classes);
 //        for (OWLClass cls : classes) {
-//        		String iri = cls.getIRI().getFragment();
-//        		System.out.print(iri);
+//        		String iri = cls.getIRI().toString();
+//        		System.out.println(iri);
+//        		NodeSet<OWLClass> children =  reasoner.getSubClasses(cls, true);
+//        		for (Node<OWLClass> node : children.getNodes()) {
+//            		for (OWLClass clazz : node.getEntities()) {
+//        				if (!clazz.isOWLNothing()) {
+//            				System.out.println(clazz.getIRI().toString());
+//        				}
+//            		}
+//            	}
 //        		break;
 //        }
         
-        //        NodeSet<OWLClass> children =  reasoner.getSubClasses(, true);
+        
         
 //        OWLOntology ontM = setIRIs(classes, objOnto, df, manager, logger);
 //        
 //        
-		File outFile = new File(inFile+"_seealso.owl");
+		File outFile = new File(inFile+"_procedures.owl");
 		
-		OWLOntology ontM = addSA(classes, objOnto, df, manager, logger);
+//		OWLOntology ontM = addSA(classes, objOnto, df, manager, logger);
 
-		OWLDocumentFormat format = manager.getOntologyFormat(ontM);
+		OWLDocumentFormat format = manager.getOntologyFormat(objOnto);
 		OWLXMLOntologyFormat rdfxmlFormat = new OWLXMLOntologyFormat();
 		if (format.isPrefixOWLOntologyFormat()) { 
 		  rdfxmlFormat.copyPrefixesFrom(format.asPrefixOWLOntologyFormat()); 
 		}
-		manager.saveOntology(ontM, rdfxmlFormat, IRI.create(outFile.toURI()));
+		manager.saveOntology(objOnto, rdfxmlFormat, IRI.create(outFile.toURI()));
         
         
         // Remove the ontology again so we can reload it later
