@@ -67,6 +67,9 @@ import org.semanticweb.owlapi.apibinding.OWLManager;
 
 import uk.ac.manchester.cs.owl.owlapi.OWLClassImpl;
 import uk.ac.manchester.cs.owl.owlapi.OWLEquivalentClassesAxiomImpl;
+import uk.ac.manchester.cs.owl.owlapi.OWLSubClassOfAxiomImpl;
+import uk.ac.manchester.cs.owl.owlapi.OWLSubObjectPropertyOfAxiomImpl;
+import uk.ac.manchester.cs.owl.owlapi.OWLSubPropertyChainAxiomImpl;
 import uk.ac.manchester.cs.owlapi.modularity.ModuleType;
 import org.semanticweb.owlapi.io.OWLXMLOntologyFormat;
 import org.semanticweb.owlapi.io.RDFXMLOntologyFormat;
@@ -82,13 +85,16 @@ import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLDocumentFormat;
 import org.semanticweb.owlapi.model.OWLEntity;
 import org.semanticweb.owlapi.model.OWLEquivalentClassesAxiom;
+import org.semanticweb.owlapi.model.OWLIndividual;
 import org.semanticweb.owlapi.model.OWLLiteral;
+import org.semanticweb.owlapi.model.OWLObjectIntersectionOf;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyChange;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyFormat;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
+import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
 import org.semanticweb.owlapi.search.EntitySearcher;
 import org.semanticweb.owlapi.util.CollectionFactory;
 import org.semanticweb.owlapi.util.CollectionFactory.ConditionalCopySet;
@@ -105,7 +111,7 @@ import io.joshworks.restclient.request.GetRequest;
 import uk.ac.manchester.cs.owlapi.modularity.SyntacticLocalityModuleExtractor;
 
 import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
-
+import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.reasoner.OWLReasonerFactory;
 import org.semanticweb.owlapi.reasoner.SimpleConfiguration;
 import org.semanticweb.owlapi.reasoner.structural.StructuralReasoner;
@@ -339,6 +345,74 @@ public class PutLabels {
         return ont;
     }
     
+    public static OWLOntology scExWithoutInter(OWLOntology ont, OWLDataFactory df, OWLOntologyManager manager, Logger logger) {
+
+        Set<OWLAxiom> axiomsToRemove = new HashSet<OWLAxiom>();
+        Set<OWLAxiom> axiomsToAdd = new HashSet<OWLAxiom>();
+        for (OWLAxiom ax : ont.getAxioms()) {
+        	if(OWLSubClassOfAxiomImpl.class.isAssignableFrom(ax.getClass())) {
+        			if(OWLObjectIntersectionOf.class.isAssignableFrom(((OWLSubClassOfAxiom) ax).getSuperClass().getClass())) { 
+						OWLObjectIntersectionOf inter = (OWLObjectIntersectionOf) ((OWLSubClassOfAxiom) ax).getSuperClass();
+	    				OWLClass superc = (OWLClass) inter.getOperands().iterator().next();
+	    				OWLClass subc = (OWLClass) ((OWLSubClassOfAxiom) ax).getSubClass();
+	    				OWLSubClassOfAxiom axiom = df.getOWLSubClassOfAxiom(subc, df.getOWLClass(superc.getIRI()));
+	    				axiomsToRemove.add(ax);
+	    				axiomsToAdd.add(axiom);
+        		}
+        	}
+        }
+        manager.removeAxioms(ont, axiomsToRemove);
+        manager.addAxioms(ont, axiomsToAdd);
+        
+        return ont;
+        
+    }
+
+    public static OWLOntology removeEqC(OWLOntology ont, OWLDataFactory df, OWLOntologyManager manager, Logger logger) {
+    	 Set<OWLAxiom> axiomsToRemove = new HashSet<OWLAxiom>();
+         Set<OWLAxiom> axiomsToAdd = new HashSet<OWLAxiom>();
+         
+         for (OWLAxiom ax : ont.getAxioms()) {
+         	if(OWLEquivalentClassesAxiomImpl.class.isAssignableFrom(ax.getClass())) {
+     			OWLClass ppalClass = ((OWLEquivalentClassesAxiomImpl) ax).getNamedClasses().iterator().next();
+         		if(OWLObjectIntersectionOf.class.isAssignableFrom(((OWLEquivalentClassesAxiom) ax).asOWLSubClassOfAxioms().iterator().next().getSubClass().getClass())) {
+					OWLObjectIntersectionOf inter = (OWLObjectIntersectionOf) ((OWLEquivalentClassesAxiom) ax).asOWLSubClassOfAxioms().iterator().next().getSubClass();
+    				OWLClass superc = (OWLClass) inter.getOperands().iterator().next();
+    				OWLSubClassOfAxiom axiom = df.getOWLSubClassOfAxiom(ppalClass, df.getOWLClass(superc.getIRI()));
+    				axiomsToAdd.add(axiom);
+         		}else if(OWLObjectIntersectionOf.class.isAssignableFrom(((OWLEquivalentClassesAxiom) ax).asOWLSubClassOfAxioms().iterator().next().getSuperClass().getClass())) {
+         			OWLObjectIntersectionOf inter = (OWLObjectIntersectionOf) ((OWLEquivalentClassesAxiom) ax).asOWLSubClassOfAxioms().iterator().next().getSuperClass();
+    				OWLClass superc = (OWLClass) inter.getOperands().iterator().next();
+    				OWLSubClassOfAxiom axiom = df.getOWLSubClassOfAxiom(ppalClass, df.getOWLClass(superc.getIRI()));
+    				axiomsToAdd.add(axiom);
+         		}
+         		for(OWLClass a : ax.getClassesInSignature()) {
+         				if (!a.getIRI().toString().equals(ppalClass.getIRI().toString())) {
+ 	        				ont = addSAAux(ppalClass, a.getIRI().toString(), ont, df, manager);
+         				}  
+         		}
+         		axiomsToRemove.add(ax);
+         	}
+         }
+
+     	manager.removeAxioms(ont, axiomsToRemove);
+        manager.addAxioms(ont, axiomsToAdd);
+     	
+     	return ont;
+    }
+    
+    public static OWLOntology removeSubObProp(OWLOntology ont, OWLDataFactory df, OWLOntologyManager manager, Logger logger) {
+   	 Set<OWLAxiom> axiomsToRemove = new HashSet<OWLAxiom>();
+        for (OWLAxiom ax : ont.getAxioms()) {
+        	if(OWLSubObjectPropertyOfAxiomImpl.class.isAssignableFrom(ax.getClass()) || OWLSubPropertyChainAxiomImpl.class.isAssignableFrom(ax.getClass())) {
+        		axiomsToRemove.add(ax);
+        	}
+        }
+
+    	manager.removeAxioms(ont, axiomsToRemove);
+    	
+    	return ont;
+   }
 
     /** The examples here show how to load ontologies
      * 
@@ -366,44 +440,33 @@ public class PutLabels {
         // We can always obtain the location where an ontology was loaded from
         IRI documentIRI = manager.getOntologyDocumentIRI(objOnto);
         OWLDataFactory df = OWLManager.getOWLDataFactory();
-        StructuralReasonerFactory rf = new StructuralReasonerFactory();
+        //StructuralReasonerFactory rf = new StructuralReasonerFactory();
+        //OWLReasoner reasoner = rf.createReasoner(objOnto);
 
         System.out.println("    from: " + documentIRI);
 
 		/*
-		 * File fileCons = new File("output.txt"); //Instantiating the PrintStream class
-		 * PrintStream stream = new PrintStream(fileCons); System.setOut(stream);
-		 */        
+		File fileCons = new File("outputEqC2.txt"); //Instantiating the PrintStream class
+		PrintStream stream = new PrintStream(fileCons); System.setOut(stream);
+    */
         
-        /**removing equivalentClasses**/
+        OWLOntology ontM = scExWithoutInter(objOnto, df, manager, logger);
         
-        Set<OWLAxiom> axiomsToRemove = new HashSet<OWLAxiom>();
-        for (OWLAxiom ax : objOnto.getAxioms()) {
-        	if(OWLEquivalentClassesAxiomImpl.class.isAssignableFrom(ax.getClass())) {
-    			OWLClass ppalClass = ((OWLEquivalentClassesAxiomImpl) ax).getNamedClasses().iterator().next();
-        		for(OWLClass a : ax.getClassesInSignature()) {
-        				if (!a.getIRI().toString().equals(ppalClass.getIRI().toString())) {
-	        				objOnto = addSAAux(ppalClass, a.getIRI().toString(), objOnto, df, manager);
-        				}  
-        		}
-        		axiomsToRemove.add(ax);
-        	}
-        }
-
-    	manager.removeAxioms(objOnto, axiomsToRemove);
-    	
+        ontM = removeEqC(ontM, df, manager, logger);
+        
+        ontM = removeSubObProp(ontM, df, manager, logger);
         
        
-        OWLClass procedure = df.getOWLClass(IRI.create("http://snomed.info/id/71388002"));
+        OWLClass procedure = df.getOWLClass(IRI.create("http://snomed.info/id/71388002")); //  procedure
         Set<OWLEntity> sig = new HashSet<OWLEntity>();
         sig.add(procedure);
         Set<OWLEntity> seedSig = new HashSet<OWLEntity>();
-        OWLReasoner reasoner = new StructuralReasoner(objOnto, new SimpleConfiguration(),
+        OWLReasoner stReasoner = new StructuralReasoner(ontM, new SimpleConfiguration(),
                 BufferingMode.NON_BUFFERING);
         for (OWLEntity ent : sig) {
             seedSig.add(ent);
             if (OWLClass.class.isAssignableFrom(ent.getClass())) { // checks if ent is an OWLClass
-                NodeSet<OWLClass> subClasses = reasoner.getSubClasses((OWLClass) ent,
+                NodeSet<OWLClass> subClasses = stReasoner.getSubClasses((OWLClass) ent,
                         false);
                 seedSig.addAll(subClasses.getFlattened());
             }
@@ -412,24 +475,24 @@ public class PutLabels {
         // Output for debugging purposes
         System.out.println();
         System.out.println("Some statistics of the original ontology:");
-        System.out.println("  " + objOnto.getSignature().size() + " entities");
-        System.out.println("  " + objOnto.getLogicalAxiomCount() + " logical axioms");
-        System.out.println("  " + (objOnto.getAxiomCount() - objOnto.getLogicalAxiomCount())
+        System.out.println("  " + ontM.getSignature().size() + " entities");
+        System.out.println("  " + ontM.getLogicalAxiomCount() + " logical axioms");
+        System.out.println("  " + (ontM.getAxiomCount() - ontM.getLogicalAxiomCount())
                 + " other axioms");
         System.out.println();
         
         
         SyntacticLocalityModuleExtractor sme = new SyntacticLocalityModuleExtractor(manager,
-                objOnto, ModuleType.STAR);
+                ontM, ModuleType.STAR);
         IRI moduleIRI = IRI.create("file:/home/brayan/eclipse-workspace/Owlapi/proceduresSCT.owl");
-        OWLOntology ontM = sme.extractAsOntology(seedSig, moduleIRI);
+        OWLOntology ontMM = sme.extractAsOntology(seedSig, moduleIRI);
 
         
         // Output for debugging purposes
         System.out.println("Some statistics of the module:");
-        System.out.println("  " + ontM.getSignature().size() + " entities");
-        System.out.println("  " + ontM.getLogicalAxiomCount() + " logical axioms");
-        System.out.println("  " + (ontM.getAxiomCount() - ontM.getLogicalAxiomCount())
+        System.out.println("  " + ontMM.getSignature().size() + " entities");
+        System.out.println("  " + ontMM.getLogicalAxiomCount() + " logical axioms");
+        System.out.println("  " + (ontMM.getAxiomCount() - ontMM.getLogicalAxiomCount())
                 + " other axioms");
         System.out.println();
         
@@ -459,12 +522,12 @@ public class PutLabels {
 		
 //		OWLOntology ontM = addSA(classes, objOnto, df, manager, logger);
 
-		OWLDocumentFormat format = manager.getOntologyFormat(objOnto);
+		OWLDocumentFormat format = manager.getOntologyFormat(ontMM);
 		OWLXMLOntologyFormat rdfxmlFormat = new OWLXMLOntologyFormat();
 		if (format.isPrefixOWLOntologyFormat()) { 
 		  rdfxmlFormat.copyPrefixesFrom(format.asPrefixOWLOntologyFormat()); 
 		}
-		manager.saveOntology(objOnto, rdfxmlFormat, IRI.create(outFile.toURI()));
+		manager.saveOntology(ontMM, rdfxmlFormat, IRI.create(outFile.toURI()));
         
         
         // Remove the ontology again so we can reload it later
