@@ -351,15 +351,24 @@ public class PutLabels {
         Set<OWLAxiom> axiomsToAdd = new HashSet<OWLAxiom>();
         for (OWLAxiom ax : ont.getAxioms()) {
         	if(OWLSubClassOfAxiomImpl.class.isAssignableFrom(ax.getClass())) {
-        			if(OWLObjectIntersectionOf.class.isAssignableFrom(((OWLSubClassOfAxiom) ax).getSuperClass().getClass())) { 
-						OWLObjectIntersectionOf inter = (OWLObjectIntersectionOf) ((OWLSubClassOfAxiom) ax).getSuperClass();
-	    				OWLClass superc = (OWLClass) inter.getOperands().iterator().next();
-	    				OWLClass subc = (OWLClass) ((OWLSubClassOfAxiom) ax).getSubClass();
-	    				OWLSubClassOfAxiom axiom = df.getOWLSubClassOfAxiom(subc, df.getOWLClass(superc.getIRI()));
-	    				axiomsToRemove.add(ax);
-	    				axiomsToAdd.add(axiom);
+    			if(OWLObjectIntersectionOf.class.isAssignableFrom(((OWLSubClassOfAxiom) ax).getSuperClass().getClass())) { 
+					OWLObjectIntersectionOf inter = (OWLObjectIntersectionOf) ((OWLSubClassOfAxiom) ax).getSuperClass();
+    				OWLClass superc = (OWLClass) inter.getOperands().iterator().next();
+    				OWLClass subc = (OWLClass) ((OWLSubClassOfAxiom) ax).getSubClass();
+    				OWLSubClassOfAxiom axiom = df.getOWLSubClassOfAxiom(subc, df.getOWLClass(superc.getIRI()));
+    				axiomsToRemove.add(ax);
+    				axiomsToAdd.add(axiom);
+
+    	        	for(OWLClass a : ax.getClassesInSignature()) {
+    	 				if (!a.getIRI().toString().equals(subc.getIRI().toString())) {
+    	     				ont = addSAAux(subc, a.getIRI().toString(), ont, df, manager);
+    	 				}  
+    	        	}
+    	        	
+    	        	logger.info(subc.getIRI().toString()+": axiom SubClassOf was removed because the superClass was an intersection. The first operand of the inersection was kept as the superClass. The remaining classes were adopted as seeAlso properties to subclass.");
         		}
         	}
+        	
         }
         manager.removeAxioms(ont, axiomsToRemove);
         manager.addAxioms(ont, axiomsToAdd);
@@ -392,6 +401,8 @@ public class PutLabels {
          				}  
          		}
          		axiomsToRemove.add(ax);
+         		
+         		logger.info(ppalClass.getIRI().toString()+": axiom EquivalentClasses was replaced by SubClassOf keeping the first operand of the intersection as the superClass. The remaining classes were adopted to seeAlso properties due to the uncertainity of the classes hierarchy.");
          	}
          }
 
@@ -413,6 +424,51 @@ public class PutLabels {
     	
     	return ont;
    }
+    
+    public static OWLOntology getBranch(IRI iriSub, OWLOntology ont, OWLDataFactory df, OWLOntologyManager manager, Logger logger) throws OWLOntologyCreationException {
+
+        
+        OWLClass subClass = df.getOWLClass(iriSub); //  physical object
+        Set<OWLEntity> sig = new HashSet<OWLEntity>();
+        sig.add(subClass);
+        Set<OWLEntity> seedSig = new HashSet<OWLEntity>();
+        OWLReasoner stReasoner = new StructuralReasoner(ont, new SimpleConfiguration(),
+                BufferingMode.NON_BUFFERING);
+        for (OWLEntity ent : sig) {
+            seedSig.add(ent);
+            if (OWLClass.class.isAssignableFrom(ent.getClass())) { // checks if ent is an OWLClass
+                NodeSet<OWLClass> subClasses = stReasoner.getSubClasses((OWLClass) ent,
+                        false);
+                seedSig.addAll(subClasses.getFlattened());
+            }
+        }
+        
+        // Output for debugging purposes
+        System.out.println();
+        System.out.println("Some statistics of the original ontology:");
+        System.out.println("  " + ont.getSignature().size() + " entities");
+        System.out.println("  " + ont.getLogicalAxiomCount() + " logical axioms");
+        System.out.println("  " + (ont.getAxiomCount() - ont.getLogicalAxiomCount())
+                + " other axioms");
+        System.out.println();
+        
+        
+        SyntacticLocalityModuleExtractor sme = new SyntacticLocalityModuleExtractor(manager,
+        		ont, ModuleType.STAR);
+        IRI moduleIRI = IRI.create("file:/home/brayan/eclipse-workspace/Owlapi/proceduresSCT.owl");
+        OWLOntology ontMM = sme.extractAsOntology(seedSig, moduleIRI);
+
+        
+        // Output for debugging purposes
+        System.out.println("Some statistics of the module:");
+        System.out.println("  " + ontMM.getSignature().size() + " entities");
+        System.out.println("  " + ontMM.getLogicalAxiomCount() + " logical axioms");
+        System.out.println("  " + (ontMM.getAxiomCount() - ontMM.getLogicalAxiomCount())
+                + " other axioms");
+        System.out.println();
+        
+        return ontMM;
+    }
 
     /** The examples here show how to load ontologies
      * 
@@ -420,7 +476,7 @@ public class PutLabels {
      * @throws OWLOntologyStorageException */
     public static void main(String[] args) throws Exception{
     	Logger logger = Logger.getLogger("MyLog");  
-        FileHandler fh = new FileHandler("LogFile.log");
+        FileHandler fh = new FileHandler("LogFilePhyObj.log");
         logger.addHandler(fh);
         SimpleFormatter formatter = new SimpleFormatter();  
         fh.setFormatter(formatter);
@@ -456,46 +512,9 @@ public class PutLabels {
         
         ontM = removeSubObProp(ontM, df, manager, logger);
         
-       
-        OWLClass procedure = df.getOWLClass(IRI.create("http://snomed.info/id/71388002")); //  procedure
-        Set<OWLEntity> sig = new HashSet<OWLEntity>();
-        sig.add(procedure);
-        Set<OWLEntity> seedSig = new HashSet<OWLEntity>();
-        OWLReasoner stReasoner = new StructuralReasoner(ontM, new SimpleConfiguration(),
-                BufferingMode.NON_BUFFERING);
-        for (OWLEntity ent : sig) {
-            seedSig.add(ent);
-            if (OWLClass.class.isAssignableFrom(ent.getClass())) { // checks if ent is an OWLClass
-                NodeSet<OWLClass> subClasses = stReasoner.getSubClasses((OWLClass) ent,
-                        false);
-                seedSig.addAll(subClasses.getFlattened());
-            }
-        }
+        IRI iriSub = IRI.create("http://snomed.info/id/71388002");
         
-        // Output for debugging purposes
-        System.out.println();
-        System.out.println("Some statistics of the original ontology:");
-        System.out.println("  " + ontM.getSignature().size() + " entities");
-        System.out.println("  " + ontM.getLogicalAxiomCount() + " logical axioms");
-        System.out.println("  " + (ontM.getAxiomCount() - ontM.getLogicalAxiomCount())
-                + " other axioms");
-        System.out.println();
-        
-        
-        SyntacticLocalityModuleExtractor sme = new SyntacticLocalityModuleExtractor(manager,
-                ontM, ModuleType.STAR);
-        IRI moduleIRI = IRI.create("file:/home/brayan/eclipse-workspace/Owlapi/proceduresSCT.owl");
-        OWLOntology ontMM = sme.extractAsOntology(seedSig, moduleIRI);
-
-        
-        // Output for debugging purposes
-        System.out.println("Some statistics of the module:");
-        System.out.println("  " + ontMM.getSignature().size() + " entities");
-        System.out.println("  " + ontMM.getLogicalAxiomCount() + " logical axioms");
-        System.out.println("  " + (ontMM.getAxiomCount() - ontMM.getLogicalAxiomCount())
-                + " other axioms");
-        System.out.println();
-        
+        OWLOntology ontMM = getBranch(iriSub, ontM, df, manager, logger);
 //        Set<OWLClass> classes = objOnto.getClassesInSignature();
         
 //		System.out.println(classes);
@@ -518,7 +537,7 @@ public class PutLabels {
 //        OWLOntology ontM = setIRIs(classes, objOnto, df, manager, logger);
 //        
 //        
-		File outFile = new File(inFile+"_procedures.owl");
+		File outFile = new File(inFile+"_phy_obj.owl");
 		
 //		OWLOntology ontM = addSA(classes, objOnto, df, manager, logger);
 
